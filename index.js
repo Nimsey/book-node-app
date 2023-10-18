@@ -1,6 +1,6 @@
 const express = require("express"); //third party module
 const app = express();// instance of the app
-const { bookSeries_setOne, bookSeries_setTwo, findAuthorsByLetter } = require("./series");
+const { bookSeries_setOne, bookSeries_setTwo, findAuthorsByLetter, findBookByISBN, listBooksByGenre } = require("./series");
 const fs = require("fs");
 
 //test using the core module fs
@@ -53,6 +53,26 @@ app.get('/bookList2', (req, res) => {
     let answer = bookSeries_setTwo;
     return res.json({ bookObj: answer });
 });
+
+// lookup book by ISBN
+app.get('/isbn-lookup/:isbn', (req, res) => {
+    let isbn = req.params.isbn;
+    let answer = findBookByISBN(isbn);
+    return res.json({ answer: answer });
+});
+
+// 
+app.get('/genre/nonfiction', (req, res) => {
+    let genre = 'nonfiction';
+    let answer = listBooksByGenre(genre);
+    return res.json({ answer: answer });
+})
+app.get('/genre/fiction', (req, res) => {
+    let genre = 'fiction';
+    let answer = listBooksByGenre(genre);
+    return res.json({ answer: answer });
+})
+
 app.get('/search/:letter', (req, res) => {
     let letter = req.params.letter;
     let answer = findAuthorsByLetter(letter);
